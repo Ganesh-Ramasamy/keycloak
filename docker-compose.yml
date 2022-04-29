@@ -1,0 +1,42 @@
+version: '3.3'
+
+networks:
+  keycloak_network:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:13.4
+    volumes:
+      - ./pg_database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - keycloak_network
+    env_file:
+      - ATT77943.env
+    #restart: unless-stopped
+  idp_keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    ports:
+      - 8081:8080
+      - 8443:8443
+    networks:
+      - keycloak_network
+    depends_on:
+      - postgres
+    env_file:
+      - ATT77943.env
+    entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev"]
+    #restart: unless-stopped
+  debug_pgadmin4:
+    image: dpage/pgadmin4:latest
+    ports:
+      - 5433:80
+    networks:
+      - keycloak_network
+    depends_on:
+      - postgres
+    env_file:
+      - ATT77943.env
+    #restart: unless-stopped
