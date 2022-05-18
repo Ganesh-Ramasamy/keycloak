@@ -1,42 +1,55 @@
-version: '3.3'
-
-networks:
-  keycloak_network:
-    driver: bridge
+version: '3'
 
 services:
+
+  keycloak:
+    image: jboss/keycloak:latest         # Pinned to 3.4.3 because this is currently the latest version which has commercial support from Red Hat: https://www.keycloak.org/support.html
+    command: [
+      "-b", "0.0.0.0",
+      "-Dkeycloak.migration.action=import",   # Replace with 'export' in order to export everything
+      "-Dkeycloak.migration.provider=dir",
+      "-Dkeycloak.migration.dir=/opt/jboss/keycloak/standalone/configuration/local-realm-config/",
+      "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING",
+      "-Dkeycloak.profile.feature.upload_scripts=enabled"
+    ]
+    ports: 
+      - 8081:8080
+    environment:
+      - POSTGRES_DATABASE=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=password
+      # - KEYCLOAK_HOSTNAME=identity.localhost.yarf.nl
+      # Legacy linking functionality is used
+      - POSTGRES_PORT_5432_TCP_ADDR=postgres
+      - POSTGRES_PORT_5432_TCP_PORT=5432
+      - PROXY_ADDRESS_FORWARDING=true
+      - KEYCLOAK_LOGLEVEL=DEBUG
+      - DB_VENDOR=POSTGRES
+      - DB_ADDR=postgres
+      - DB_DATABASE=keycloak
+      - DB_USER=keycloak
+      - DB_PASSWORD=password
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=adminsecret
+#      - JAVA_TOOL_OPTIONS=-Dkeycloak.profile.feature.admin_fine_grained_authz=enabled -Dkeycloak.profile.feature.token_exchange=enabled  # Required to enable Token exchange feature in newer versions of Keycloak
+    volumes:
+      - ./local-realm-config:/opt/jboss/keycloak/standalone/configuration/local-realm-config
+    networks:
+      default:
+        aliases:
+          - keycloak
+
   postgres:
     image: postgres:13.4
     volumes:
       - ./pg_database:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 5433:5432
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=password
     networks:
-      - keycloak_network
-    env_file:
-      - ATT77943.env
-    #restart: unless-stopped
-  idp_keycloak:
-    image: quay.io/keycloak/keycloak:latest
-    ports:
-      - 8081:8080
-      - 8443:8443
-    networks:
-      - keycloak_network
-    depends_on:
-      - postgres
-    env_file:
-      - ATT77943.env
-    entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev"]
-    #restart: unless-stopped
-  debug_pgadmin4:
-    image: dpage/pgadmin4:latest
-    ports:
-      - 5433:80
-    networks:
-      - keycloak_network
-    depends_on:
-      - postgres
-    env_file:
-      - ATT77943.env
-    #restart: unless-stopped
+      default:
+        aliases:
+          - postgres
