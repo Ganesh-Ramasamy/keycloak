@@ -68,6 +68,30 @@
       "containerId" : "example",
       "attributes" : { }
     }, {
+      "id" : "e0fffc99-1a38-4528-9863-71721b4ccf36",
+      "name" : "patient-role",
+      "description" : "patient role",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "example",
+      "attributes" : { }
+    }, {
+      "id" : "085e00f4-99ef-4b11-9eb8-eb9282e64084",
+      "name" : "clinician-role",
+      "description" : "clinician role",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "example",
+      "attributes" : { }
+    }, {
+      "id" : "faafe0ac-933b-4684-b48c-e1ffce3d2489",
+      "name" : "nurse-role",
+      "description" : "nurse role",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "example",
+      "attributes" : { }
+    }, {
       "id" : "e2406b05-2895-41a0-87fc-386b34b5ae2d",
       "name" : "uma_authorization",
       "description" : "${role_uma_authorization}",
@@ -380,6 +404,28 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister" : false,
   "webAuthnPolicyPasswordlessAcceptableAaguids" : [ ],
   "users" : [ {
+    "id" : "b61d9fa3-d2d6-4aa0-9f82-4b0dacabbaaa",
+    "createdTimestamp" : 1653280275584,
+    "username" : "antenatal-back-end-realm-admin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "credentials" : [ {
+      "id" : "6a85cad1-f143-4050-9051-366d12a34b03",
+      "type" : "password",
+      "createdDate" : 1653280322426,
+      "secretData" : "{\"value\":\"/RrloXf/Sj/IeR/sk7PGSIeSuxn3JBQcf2sR+W5Apx7BQM4l07hO41Rov1bp0KnosXoynA9E21MGO8ugBeHYEA==\",\"salt\":\"Qdc6mWka10R6tzr5h92izQ==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-example" ],
+    "clientRoles" : {
+      "realm-management" : [ "manage-realm", "view-events", "manage-events", "manage-clients", "query-realms", "manage-identity-providers", "query-users", "impersonation", "uma_protection", "view-clients", "query-clients", "view-identity-providers", "view-authorization", "realm-admin", "manage-users", "view-users", "create-client", "query-groups", "view-realm", "manage-authorization" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
     "id" : "eba26964-942e-4dca-bdc3-7da02ed9e76d",
     "createdTimestamp" : 1652338879042,
     "username" : "service-account-antenatal-back-end",
@@ -420,7 +466,7 @@
     "enabled" : true,
     "totp" : false,
     "emailVerified" : false,
-    "firstName" : "john",
+    "firstName" : "fname",
     "lastName" : "lname",
     "credentials" : [ {
       "id" : "8ffc3775-0962-4cfe-9cac-2c4becb1f161",
@@ -431,7 +477,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "offline_access", "uma_authorization" ],
+    "realmRoles" : [ "offline_access", "patient-role", "uma_authorization" ],
     "notBefore" : 0,
     "groups" : [ ]
   } ],
